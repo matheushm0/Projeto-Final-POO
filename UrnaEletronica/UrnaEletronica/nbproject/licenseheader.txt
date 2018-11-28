@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Projeto Final da Cadeira de POO em Java
+${licensePrefix}IFCE 2018.2
+<#if licenseLast??>
+${licenseLast}
+</#if>
