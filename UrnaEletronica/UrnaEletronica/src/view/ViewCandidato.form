@@ -212,7 +212,7 @@
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="txtNumero" alignment="0" max="32767" attributes="0"/>
                                       <Component id="comboPartido" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtNome" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtNomeCandidato" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -230,7 +230,7 @@
                           <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtNome" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNomeCandidato" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -257,7 +257,7 @@
                     <Property name="text" type="java.lang.String" value="Nome"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtNome">
+                <Component class="javax.swing.JTextField" name="txtNomeCandidato">
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>

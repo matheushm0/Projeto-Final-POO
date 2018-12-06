@@ -5,7 +5,10 @@
  */
 package view;
 
+import java.awt.Event;
 import javax.swing.JOptionPane;
+import model.Eleitor;
+import model.EleitorTableModel;
 
 /**
  *
@@ -16,8 +19,13 @@ public class ViewEleitor extends javax.swing.JFrame {
     /**
      * Creates new form ViewEleitor
      */
+    EleitorTableModel tableModel = new EleitorTableModel();
+
     public ViewEleitor() {
         initComponents();
+
+        jEleitor.setModel(tableModel);
+
     }
 
     /**
@@ -33,11 +41,11 @@ public class ViewEleitor extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jScrollPane = new javax.swing.JScrollPane();
+        jEleitor = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
+        txtNomeEleitor = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtCPF = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -49,8 +57,8 @@ public class ViewEleitor extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         txtNumero = new javax.swing.JTextField();
         botaoSalvar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        botaoExcluir = new javax.swing.JButton();
+        botaoNovo = new javax.swing.JButton();
         botaoVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,7 +98,24 @@ public class ViewEleitor extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jScrollPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPaneMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jScrollPaneMouseReleased(evt);
+            }
+        });
+        jScrollPane.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jScrollPaneKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jScrollPaneKeyReleased(evt);
+            }
+        });
+
+        jEleitor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -101,7 +126,23 @@ public class ViewEleitor extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jEleitor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jEleitorMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jEleitorMouseReleased(evt);
+            }
+        });
+        jEleitor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jEleitorKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jEleitorKeyReleased(evt);
+            }
+        });
+        jScrollPane.setViewportView(jEleitor);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -144,15 +185,25 @@ public class ViewEleitor extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(102, 102, 102));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/btn-excluir.png"))); // NOI18N
-        jButton2.setText("Excluir");
+        botaoExcluir.setBackground(new java.awt.Color(102, 102, 102));
+        botaoExcluir.setForeground(new java.awt.Color(255, 255, 255));
+        botaoExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/btn-excluir.png"))); // NOI18N
+        botaoExcluir.setText("Excluir");
+        botaoExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoExcluirActionPerformed(evt);
+            }
+        });
 
-        jButton3.setBackground(new java.awt.Color(102, 102, 102));
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/btn-novo.png"))); // NOI18N
-        jButton3.setText("Novo");
+        botaoNovo.setBackground(new java.awt.Color(102, 102, 102));
+        botaoNovo.setForeground(new java.awt.Color(255, 255, 255));
+        botaoNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/btn-novo.png"))); // NOI18N
+        botaoNovo.setText("Novo");
+        botaoNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoNovoActionPerformed(evt);
+            }
+        });
 
         botaoVoltar.setBackground(new java.awt.Color(102, 102, 102));
         botaoVoltar.setForeground(new java.awt.Color(255, 255, 255));
@@ -171,7 +222,7 @@ public class ViewEleitor extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNome)
+                    .addComponent(txtNomeEleitor)
                     .addComponent(txtCPF)
                     .addComponent(txtCEP)
                     .addComponent(txtRua)
@@ -189,9 +240,9 @@ public class ViewEleitor extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(botaoVoltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(botaoNovo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(botaoExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(botaoSalvar)
                         .addGap(4, 4, 4)))
@@ -203,7 +254,7 @@ public class ViewEleitor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNomeEleitor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -227,8 +278,8 @@ public class ViewEleitor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoSalvar)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
+                    .addComponent(botaoExcluir)
+                    .addComponent(botaoNovo)
                     .addComponent(botaoVoltar))
                 .addContainerGap())
         );
@@ -242,7 +293,7 @@ public class ViewEleitor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -251,7 +302,7 @@ public class ViewEleitor extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -276,12 +327,21 @@ public class ViewEleitor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCPFActionPerformed
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
-        // TODO add your handling code here:
-        
-        if (txtCPF.getText().trim().length() != 14 || txtNome.getText().trim().equals("") || txtCEP.getText().trim().length() != 9 || txtRua.getText().trim().equals("") || txtBairro.getText().trim().equals("") || txtNumero.getText().trim().equals("")){
+        // TODO add your handling code here:      
+        if (jEleitor.getSelectedRow() != -1) {
+            tableModel.setValueAt(txtNomeEleitor.getText(), jEleitor.getSelectedRow(), 0);
+            tableModel.setValueAt(txtCPF.getText(), jEleitor.getSelectedRow(), 1);
+            tableModel.setValueAt(txtCEP.getText(), jEleitor.getSelectedRow(), 2);
+            tableModel.setValueAt(txtRua.getText(), jEleitor.getSelectedRow(), 3);
+            tableModel.setValueAt(txtBairro.getText(), jEleitor.getSelectedRow(), 4);
+            tableModel.setValueAt(txtNumero.getText(), jEleitor.getSelectedRow(), 5);
+        }
+
+        if (txtCPF.getText().trim().length() != 14 || txtNomeEleitor.getText().trim().equals("") || txtCEP.getText().trim().length() != 9 || txtRua.getText().trim().equals("") || txtBairro.getText().trim().equals("") || txtNumero.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Campos preenchidos com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            limparCampos();
         }
     }//GEN-LAST:event_botaoSalvarActionPerformed
 
@@ -290,6 +350,90 @@ public class ViewEleitor extends javax.swing.JFrame {
         new ViewPrincipal().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_botaoVoltarActionPerformed
+
+    private void jScrollPaneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jScrollPaneKeyPressed
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jScrollPaneKeyPressed
+
+    private void jScrollPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jScrollPaneKeyReleased
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jScrollPaneKeyReleased
+
+    private void jScrollPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPaneMouseClicked
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jScrollPaneMouseClicked
+
+    private void jScrollPaneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPaneMouseReleased
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jScrollPaneMouseReleased
+
+    private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
+        Eleitor e = new Eleitor();
+        e.setNomeEleitor(txtNomeEleitor.getText());
+        e.setCpf(txtCPF.getText());
+        e.setCep(txtCEP.getText());
+        e.setRua(txtRua.getText());
+        e.setBairro(txtBairro.getText());
+        e.setNumero(txtNumero.getText());
+        tableModel.addRow(e);
+        
+        limparCampos();            
+    }//GEN-LAST:event_botaoNovoActionPerformed
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+        // TODO add your handling code here:
+        if (jEleitor.getSelectedRow() != -1) {
+            tableModel.removeRow(jEleitor.getSelectedRow());
+        }
+    }//GEN-LAST:event_botaoExcluirActionPerformed
+
+    @Override
+    public boolean action(Event evt, Object what) {
+        return super.action(evt, what); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void limparCampos() {
+        txtNomeEleitor.setText("");
+        txtCPF.setText("");
+        txtCEP.setText("");
+        txtRua.setText("");
+        txtBairro.setText("");
+        txtNumero.setText("");
+    }
+
+//   isto deveria setar quando o usuario clica na tabela, descobri que eh mais complicado que isso    
+    private void setarCampos(int e) {
+        txtNomeEleitor.setText(jEleitor.getValueAt(e, 0).toString());
+        txtCPF.setText(jEleitor.getValueAt(e, 1).toString());
+        txtCEP.setText(jEleitor.getValueAt(e, 2).toString());
+        txtRua.setText(jEleitor.getValueAt(e, 3).toString());
+        txtBairro.setText(jEleitor.getValueAt(e, 4).toString());
+        txtNumero.setText(jEleitor.getValueAt(e, 5).toString());
+    }
+
+    private void jEleitorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jEleitorKeyPressed
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jEleitorKeyPressed
+
+    private void jEleitorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jEleitorKeyReleased
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jEleitorKeyReleased
+
+    private void jEleitorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jEleitorMouseClicked
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jEleitorMouseClicked
+
+    private void jEleitorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jEleitorMouseReleased
+        // TODO add your handling code here:
+        setarCampos(jEleitor.getSelectedRow());
+    }//GEN-LAST:event_jEleitorMouseReleased
 
     /**
      * @param args the command line arguments
@@ -327,10 +471,11 @@ public class ViewEleitor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoExcluir;
+    private javax.swing.JButton botaoNovo;
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JButton botaoVoltar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTable jEleitor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -342,12 +487,11 @@ public class ViewEleitor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCEP;
     private javax.swing.JFormattedTextField txtCPF;
-    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtNomeEleitor;
     private javax.swing.JTextField txtNumero;
     private javax.swing.JTextField txtRua;
     // End of variables declaration//GEN-END:variables
