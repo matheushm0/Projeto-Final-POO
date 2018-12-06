@@ -97,6 +97,7 @@ public class ViewPartidos extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jPartidos.setGridColor(new java.awt.Color(102, 102, 102));
         jPartidos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPartidosMouseClicked(evt);
@@ -241,7 +242,11 @@ public class ViewPartidos extends javax.swing.JFrame {
         if(jPartidos.getSelectedRow() !=-1){
             tableModel.removeRow(jPartidos.getSelectedRow());
             limparCampos();
-        }
+        }else{
+        ////////////////////   
+        /////warning nenhuma linha selecionada
+        /////////////////////
+       }
     }//GEN-LAST:event_botaoExcluirActionPerformed
 
     private void botaoVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoVoltarActionPerformed
@@ -252,23 +257,34 @@ public class ViewPartidos extends javax.swing.JFrame {
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
         // TODO add your handling code here:
-        if(jPartidos.getSelectedRow() !=-1){
-            tableModel.setValueAt( txtNomePartidos.getText(),jPartidos.getSelectedRow(),0);
-        }    
-        if(txtNomePartidos.getText().trim().equals("")){
-            JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Alerta", JOptionPane.WARNING_MESSAGE);         
+        if(existeCopia(jPartidos.getSelectedRow())){
+            //////////////////////////////
+            ///////////warning partido ja existente
+            //////////////////////////////
         }else{
-            JOptionPane.showMessageDialog(null, "Campos preenchidos com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-        }        
+            if(jPartidos.getSelectedRow() !=-1){
+                tableModel.setValueAt(txtNomePartidos.getText(),jPartidos.getSelectedRow(),0);
+                limparCampos();
+            }else{ 
+                ////////////////////   
+                /////warning nenhuma linha selecionada
+                /////////////////////            
+            }
+        }    
     }//GEN-LAST:event_botaoSalvarActionPerformed
 
     private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
-        // TODO add your handling code he        
-        Partido p  = new Partido();
-        p.setNome(txtNomePartidos.getText());
-        tableModel.addRow(p);
-        limparCampos();
+       if(existeCopia()){
+            //////////////////////////////
+            ///////////warning partido ja existente
+            //////////////////////////////           
+       }else{
+            //System.out.println("criando novo " + txtPart.getText());
+            Partido p  = new Partido();
+            p.setNome(txtNomePartidos.getText());
+            tableModel.addRow(p);
+            limparCampos();
+       }
     }//GEN-LAST:event_botaoNovoActionPerformed
 
     private void jPartidosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPartidosKeyPressed
@@ -298,7 +314,30 @@ public class ViewPartidos extends javax.swing.JFrame {
     private void setarCampos(int e){
         txtNomePartidos.setText(jPartidos.getValueAt(e, 0).toString());
     }
-   
+    private boolean existeCopia(int e){
+        //'e' é a linha que esta o dado sendo editado, para ser pulado na verificação
+        //System.out.println("verificação complexa : " + e);        
+        for(int i = 0; i < jPartidos.getRowCount() ;i++){
+            if(i == e){
+                continue;
+            }
+            if(jPartidos.getValueAt(i, 0).equals(txtNomePartidos.getText())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean existeCopia(){
+        //metodo sobrecarregado para verificar a existencia de copias quando uma linha nova eh criada
+        //System.out.println("verificação simples");
+        for(int i = 0; i < jPartidos.getRowCount() ;i++){
+            if(jPartidos.getValueAt(i, 0).equals(txtNomePartidos.getText())){
+                return true;
+            }
+        }
+        return false;
+    }   
     /**
      * @param args the command line arguments
      */

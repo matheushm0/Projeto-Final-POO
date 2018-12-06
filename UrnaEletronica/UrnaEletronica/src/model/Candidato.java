@@ -12,9 +12,9 @@ package model;
 public class Candidato {
    private int idCandidato;
    private String nomeCandidato;
-   private int numeroCandidato;
+   private String numeroCandidato;
    private int votos;
-   private Partido idPartido;
+   private String idPartido;
 
     public int getIdCandidato() {
         return idCandidato;
@@ -32,11 +32,11 @@ public class Candidato {
         this.nomeCandidato = nomeCandidato;
     }
 
-    public int getNumeroCandidato() {
+    public String getNumeroCandidato() {
         return numeroCandidato;
     }
 
-    public void setNumeroCandidato(int numeroCandidato) {
+    public void setNumeroCandidato(String numeroCandidato) {
         this.numeroCandidato = numeroCandidato;
     }
 
@@ -48,11 +48,11 @@ public class Candidato {
         this.votos = votos;
     }
 
-    public Partido getIdPartido() {
+    public String getIdPartido() {
         return idPartido;
     }
 
-    public void setIdPartido(Partido idPartido) {
+    public void setIdPartido(String idPartido) {
         this.idPartido = idPartido;
     }
 

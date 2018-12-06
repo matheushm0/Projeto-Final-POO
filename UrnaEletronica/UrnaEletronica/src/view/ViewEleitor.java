@@ -327,22 +327,30 @@ public class ViewEleitor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCPFActionPerformed
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
-        // TODO add your handling code here:      
-        if (jEleitor.getSelectedRow() != -1) {
-            tableModel.setValueAt(txtNomeEleitor.getText(), jEleitor.getSelectedRow(), 0);
-            tableModel.setValueAt(txtCPF.getText(), jEleitor.getSelectedRow(), 1);
-            tableModel.setValueAt(txtCEP.getText(), jEleitor.getSelectedRow(), 2);
-            tableModel.setValueAt(txtRua.getText(), jEleitor.getSelectedRow(), 3);
-            tableModel.setValueAt(txtBairro.getText(), jEleitor.getSelectedRow(), 4);
-            tableModel.setValueAt(txtNumero.getText(), jEleitor.getSelectedRow(), 5);
+        if(existeCopia(jEleitor.getSelectedRow())){
+            JOptionPane.showMessageDialog(null, "CPF " + txtCPF.getText() + "ja existe, tente outro CPF", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }else{
+            if(jEleitor.getSelectedRow() !=-1){
+                if (txtCPF.getText().trim().length() != 14 || txtNomeEleitor.getText().trim().equals("") || txtCEP.getText().trim().length() != 9 || txtRua.getText().trim().equals("") || txtBairro.getText().trim().equals("") || txtNumero.getText().trim().equals("")){
+                    JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
+                }else{
+                        tableModel.setValueAt( txtNomeEleitor.getText(),jEleitor.getSelectedRow(),0);
+                        tableModel.setValueAt( txtCPF.getText(),jEleitor.getSelectedRow(),1);
+                        tableModel.setValueAt( txtCEP.getText(),jEleitor.getSelectedRow(),2);
+                        tableModel.setValueAt( txtRua.getText(),jEleitor.getSelectedRow(),3);
+                        tableModel.setValueAt( txtBairro.getText(),jEleitor.getSelectedRow(),4);
+                        tableModel.setValueAt( txtNumero.getText(),jEleitor.getSelectedRow(),5);
+                        limparCampos();
+                        JOptionPane.showMessageDialog(null, "Campos modificados com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+            }else{
+                /////////////////////////
+                ///////warning que nenhuma linha foi selecionada
+                ///////////////////////////
+            }
         }
 
-        if (txtCPF.getText().trim().length() != 14 || txtNomeEleitor.getText().trim().equals("") || txtCEP.getText().trim().length() != 9 || txtRua.getText().trim().equals("") || txtBairro.getText().trim().equals("") || txtNumero.getText().trim().equals("")) {
-            JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Campos preenchidos com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            limparCampos();
-        }
     }//GEN-LAST:event_botaoSalvarActionPerformed
 
     private void botaoVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoVoltarActionPerformed
@@ -372,22 +380,36 @@ public class ViewEleitor extends javax.swing.JFrame {
     }//GEN-LAST:event_jScrollPaneMouseReleased
 
     private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
-        Eleitor e = new Eleitor();
-        e.setNomeEleitor(txtNomeEleitor.getText());
-        e.setCpf(txtCPF.getText());
-        e.setCep(txtCEP.getText());
-        e.setRua(txtRua.getText());
-        e.setBairro(txtBairro.getText());
-        e.setNumero(txtNumero.getText());
-        tableModel.addRow(e);
-        
-        limparCampos();            
+        if(existeCopia()){
+            JOptionPane.showMessageDialog(null, "CPF " + txtCPF.getText() + " ja existe, tente outro CPF", "Alerta", JOptionPane.WARNING_MESSAGE);
+        }else{
+            if(txtCPF.getText().trim().length() != 14 || txtNomeEleitor.getText().trim().equals("") || txtCEP.getText().trim().length() != 9 || txtRua.getText().trim().equals("") || txtBairro.getText().trim().equals("") || txtNumero.getText().trim().equals("")){
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Alerta", JOptionPane.WARNING_MESSAGE);
+            }else{
+                
+                Eleitor e = new Eleitor();
+                e.setNomeEleitor(txtNomeEleitor.getText());
+                e.setCpf(txtCPF.getText());
+                e.setCep(txtCEP.getText());
+                e.setRua(txtRua.getText());
+                e.setBairro(txtBairro.getText());
+                e.setNumero(txtNumero.getText()); 
+                tableModel.addRow(e);
+                limparCampos();
+                JOptionPane.showMessageDialog(null, "Campos preenchidos com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                
+            }
+        }        
     }//GEN-LAST:event_botaoNovoActionPerformed
 
     private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
-        // TODO add your handling code here:
-        if (jEleitor.getSelectedRow() != -1) {
+        if(jEleitor.getSelectedRow() !=-1){
             tableModel.removeRow(jEleitor.getSelectedRow());
+            limparCampos();
+        }else{
+            /////////////////////////
+            ///////warning que nenhuma linha foi selecionada
+            ///////////////////////////
         }
     }//GEN-LAST:event_botaoExcluirActionPerformed
 
@@ -414,6 +436,29 @@ public class ViewEleitor extends javax.swing.JFrame {
         txtBairro.setText(jEleitor.getValueAt(e, 4).toString());
         txtNumero.setText(jEleitor.getValueAt(e, 5).toString());
     }
+    private boolean existeCopia(int e){
+        //'e' é a linha que esta o dado sendo editado, para ser pulado na verificação
+        for(int i = 0; i < jEleitor.getRowCount() ;i++){
+            if(i == e){
+                continue;
+            }
+            if(jEleitor.getValueAt(i, 1).equals(txtCPF.getText())){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean existeCopia(){
+        //metodo sobrecarregado para verificar a existencia de copias quando uma linha nova eh criada
+        for(int i = 0; i < jEleitor.getRowCount() ;i++){
+            if(jEleitor.getValueAt(i, 1).equals(txtCPF.getText())){
+                return true;
+            }
+        }
+        return false;
+    }
+        
 
     private void jEleitorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jEleitorKeyPressed
         // TODO add your handling code here:
