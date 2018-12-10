@@ -2,20 +2,22 @@
  * Projeto Final da Cadeira de POO em Java
  * IFCE 2018.2
  */
-package model;
+package Model.bean;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import Model.bean.Partido;
+
 
 /**
  *
  * @author Matheus
  */
-public class CandidatoTableModel extends AbstractTableModel{
-
-    private List<Candidato> dados = new ArrayList<>();
-    private String[] colunas = {"Nome","Partido","Número"};
+public class PartidoTableModel extends AbstractTableModel{
+    
+    private List<Partido> dados = new ArrayList<>();
+    private String[] colunas = {"Nome do partido"};
 
 
     @Override
@@ -35,34 +37,21 @@ public class CandidatoTableModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int linha, int coluna) {
-        switch(coluna){
-            case 0:
-                return dados.get(linha).getNomeCandidato();
-            case 1:
-                return dados.get(linha).getIdPartido();
-            case 2:
-                return dados.get(linha).getNumeroCandidato();
+   
+        return dados.get(linha).getNome();
             
-        }
-        return null;
+    
     }
     public void setValueAt(Object valor, int linha, int coluna){
-        switch(coluna){
-            case 0:
-                 dados.get(linha).setNomeCandidato((String)valor);
-                 break;
-            case 1:
-                 dados.get(linha).setIdPartido((String)valor);
-                 break;
-            case 2:
-                 dados.get(linha).setNumeroCandidato((String)valor);
-                 break;
+ 
+         dados.get(linha).setNome((String)valor);
+                 
             
-        } 
+     
         this.fireTableRowsUpdated(linha, linha);
     }
     
-    public void addRow(Candidato e){
+    public void addRow(Partido e){
         this.dados.add(e);
         this.fireTableDataChanged();
     }
@@ -70,4 +59,5 @@ public class CandidatoTableModel extends AbstractTableModel{
         this.dados.remove(linha);
         this.fireTableRowsDeleted(linha, linha);
     }
+    
 }

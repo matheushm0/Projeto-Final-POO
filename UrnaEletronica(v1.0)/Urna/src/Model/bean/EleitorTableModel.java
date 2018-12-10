@@ -2,20 +2,22 @@
  * Projeto Final da Cadeira de POO em Java
  * IFCE 2018.2
  */
-package model;
+package Model.bean;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import Model.bean.Eleitor;
+
 
 /**
  *
  * @author Matheus
  */
-public class CandidatoTableModel extends AbstractTableModel{
+public class EleitorTableModel extends AbstractTableModel{
 
-    private List<Candidato> dados = new ArrayList<>();
-    private String[] colunas = {"Nome","Partido","Número"};
+    private List<Eleitor> dados = new ArrayList<>();
+    private String[] colunas = {"Nome","CPF","CEP","Rua","Bairro","Número"};
 
 
     @Override
@@ -37,11 +39,17 @@ public class CandidatoTableModel extends AbstractTableModel{
     public Object getValueAt(int linha, int coluna) {
         switch(coluna){
             case 0:
-                return dados.get(linha).getNomeCandidato();
+                return dados.get(linha).getNomeEleitor();
             case 1:
-                return dados.get(linha).getIdPartido();
+                return dados.get(linha).getCpf();
             case 2:
-                return dados.get(linha).getNumeroCandidato();
+                return dados.get(linha).getCep();
+            case 3:
+                return dados.get(linha).getRua();
+            case 4:
+                return dados.get(linha).getBairro();
+            case 5:
+                return dados.get(linha).getNumero();
             
         }
         return null;
@@ -49,25 +57,35 @@ public class CandidatoTableModel extends AbstractTableModel{
     public void setValueAt(Object valor, int linha, int coluna){
         switch(coluna){
             case 0:
-                 dados.get(linha).setNomeCandidato((String)valor);
+                 dados.get(linha).setNomeEleitor((String)valor);
                  break;
             case 1:
-                 dados.get(linha).setIdPartido((String)valor);
+                 dados.get(linha).setCpf((String)valor);
                  break;
             case 2:
-                 dados.get(linha).setNumeroCandidato((String)valor);
+                 dados.get(linha).setCep((String)valor);
+                 break;
+            case 3:
+                 dados.get(linha).setRua((String)valor);
+                 break;
+            case 4:
+                 dados.get(linha).setBairro((String)valor);
+                 break;
+            case 5:
+                 dados.get(linha).setNumero ((String)valor);
                  break;
             
         } 
         this.fireTableRowsUpdated(linha, linha);
     }
     
-    public void addRow(Candidato e){
+    public void addRow(Eleitor e){
         this.dados.add(e);
         this.fireTableDataChanged();
     }
      public void removeRow(int linha){
         this.dados.remove(linha);
         this.fireTableRowsDeleted(linha, linha);
-    }
+    }    
+    
 }

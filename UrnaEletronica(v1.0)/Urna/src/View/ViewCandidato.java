@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package View;
 
+import Model.DAO.CandidatoDAO;
+import Model.DAO.PartidoDAO;
+import Model.bean.Candidato;
+import Model.bean.Partido;
 import javax.swing.JOptionPane;
-import javax.swing.table.TableModel;
-import model.Candidato;
-import model.CandidatoTableModel;
-import model.Partido;
-
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,11 +21,37 @@ public class ViewCandidato extends javax.swing.JFrame {
     /**
      * Creates new form ViewCandidato
      */
-    CandidatoTableModel tableModel = new CandidatoTableModel(); 
     public ViewCandidato() {
         initComponents();
-        jCandidato.setModel((TableModel) tableModel);
+        DefaultTableModel dtmCandidatos =  (DefaultTableModel) jTCandidatos.getModel();
+        PartidoDAO dao = new PartidoDAO();
+        for(Partido p: dao.read()){
+            comboPartido.addItem(p);
+        }
+        
+        readJTable();
+        
+        
+        
+        
     }
+    public void readJTable (){
+        DefaultTableModel dtmCandidatos =  (DefaultTableModel) jTCandidatos.getModel();
+        dtmCandidatos.setNumRows(0);
+        CandidatoDAO dao = new CandidatoDAO();
+        
+        for (Candidato c: dao.read()){
+            dtmCandidatos.addRow(new Object[]{
+                c.getNomeCandidato(),
+                c.getNumeroCandidato(),
+                c.getIdPartido(),
+                c.getVotos()
+                
+            });
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,12 +68,12 @@ public class ViewCandidato extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jCandidato = new javax.swing.JTable();
+        jTCandidatos = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtNomeCandidato = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jComboBoxPartido = new javax.swing.JComboBox<>();
+        comboPartido = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         txtNumero = new javax.swing.JTextField();
         botaoSalvar = new javax.swing.JButton();
@@ -97,35 +123,29 @@ public class ViewCandidato extends javax.swing.JFrame {
         );
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jScrollPane1KeyReleased(evt);
+            }
+        });
 
-        jCandidato.setModel(new javax.swing.table.DefaultTableModel(
+        jTCandidatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "NOME", "NUMERO", "PARTIDO", "VOTOS"
             }
-        ));
-        jCandidato.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jCandidatoMouseClicked(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                jCandidatoMouseReleased(evt);
-            }
-        });
-        jCandidato.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jCandidatoKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jCandidatoKeyReleased(evt);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jCandidato);
+        jScrollPane1.setViewportView(jTCandidatos);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -133,8 +153,13 @@ public class ViewCandidato extends javax.swing.JFrame {
 
         jLabel4.setText("Partido");
 
-        jComboBoxPartido.setBackground(new java.awt.Color(240, 240, 240));
-        jComboBoxPartido.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboPartido.setBackground(new java.awt.Color(240, 240, 240));
+        comboPartido.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        comboPartido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPartidoActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Número");
 
@@ -162,11 +187,6 @@ public class ViewCandidato extends javax.swing.JFrame {
         botaoNovo.setForeground(new java.awt.Color(255, 255, 255));
         botaoNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/btn-novo.png"))); // NOI18N
         botaoNovo.setText("Novo");
-        botaoNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoNovoActionPerformed(evt);
-            }
-        });
 
         botaoVoltar.setBackground(new java.awt.Color(102, 102, 102));
         botaoVoltar.setForeground(new java.awt.Color(255, 255, 255));
@@ -183,6 +203,23 @@ public class ViewCandidato extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboPartido, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtNumero, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNomeCandidato, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addComponent(botaoVoltar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(botaoNovo)
@@ -191,23 +228,6 @@ public class ViewCandidato extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoSalvar)
                 .addGap(12, 12, 12))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtNumero, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxPartido, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNomeCandidato, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,15 +236,15 @@ public class ViewCandidato extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNomeCandidato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxPartido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
+                .addComponent(comboPartido, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoSalvar)
                     .addComponent(botaoExcluir)
@@ -251,7 +271,7 @@ public class ViewCandidato extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -264,7 +284,7 @@ public class ViewCandidato extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -289,116 +309,48 @@ public class ViewCandidato extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoVoltarActionPerformed
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
-        if(existeCopia(jCandidato.getSelectedRow())){
-            /////////////////////////////////////////////////////////
-            ///mostrar warning que ja existe um candidato com o numero jTextFieldNumero.getText()
-            /////////////////////////////////////////////////////////
-            
+        DefaultTableModel dtmCandidatos =  (DefaultTableModel) jTCandidatos.getModel();
+        Partido p = (Partido) comboPartido.getSelectedItem();
+        Object [] dados = {txtNomeCandidato.getText(),txtNumero.getText(),comboPartido.getSelectedItem()};
+        dtmCandidatos.addRow(dados);
+        
+        Candidato c = new Candidato();
+        CandidatoDAO dao = new CandidatoDAO();
+        c.setNomeCandidato(txtNomeCandidato.getText());
+        c.setNumeroCandidato(Integer.parseInt(txtNumero.getText()));
+        c.setIdPartido((Partido) comboPartido.getSelectedItem());
+        dao.create(c);
+        
+        readJTable();
+      
+        
+        if(txtNomeCandidato.getText().trim().equals("")|| txtNumero.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos.", "Alerta", JOptionPane.WARNING_MESSAGE);         
         }else{
-            if(jCandidato.getSelectedRow() !=-1){
-                tableModel.setValueAt( txtNomeCandidato.getText(),jCandidato.getSelectedRow(),0);
-                tableModel.setValueAt( jComboBoxPartido.getSelectedItem().toString(),jCandidato.getSelectedRow(),1);
-                tableModel.setValueAt( txtNumero.getText(),jCandidato.getSelectedRow(),2);
-                limparCampos();
-            }else{
-            //////////////////////////////
-            /////cai nesse else se o usuario não selecionar nenhuma linha pra sobrescrever 
-            /////e apertar salvar, faça um warning se quiser 
-            /////////////////////////////
-            }
+            JOptionPane.showMessageDialog(null, "Campos preenchidos com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_botaoSalvarActionPerformed
-    
-    private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
-        if(existeCopia()){
-            //////////////////////////////
-            //////warning de que não foi possivel criar pois ja existe um candidato com esse numero
-            ////// referencie o numero inserido pelo usuario por jTextFieldNumero.getText()
-            ////////////////////////////
-        }else{
-            Candidato e = new Candidato();
-            e.setNomeCandidato(txtNomeCandidato.getText());
-            e.setIdPartido(jComboBoxPartido.getSelectedItem().toString());
-            e.setNumeroCandidato(txtNumero.getText()); 
-            tableModel.addRow(e);        
-            limparCampos();
-        }
-    }//GEN-LAST:event_botaoNovoActionPerformed
+
+    private void comboPartidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPartidoActionPerformed
+        // TODO add your handling code here:
+       
+        
+    }//GEN-LAST:event_comboPartidoActionPerformed
+
+    private void jScrollPane1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jScrollPane1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jScrollPane1KeyReleased
 
     private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
-        if(jCandidato.getSelectedRow() !=-1){
-            tableModel.removeRow(jCandidato.getSelectedRow());
-            limparCampos();
-        }else{
-            /////////////////////////
-            ///////warning que nenhuma linha foi selecionada
-            ///////////////////////////
-        }
+        // TODO add your handling code here:
+        Candidato c = new Candidato();
+        CandidatoDAO dao = new CandidatoDAO();
+        
+        c.setNumeroCandidato(Integer.parseInt(txtNumero.getText()));
+        dao.delete(c);
+        
     }//GEN-LAST:event_botaoExcluirActionPerformed
 
-    private void jCandidatoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCandidatoKeyPressed
-        setarCampos(jCandidato.getSelectedRow());
-    }//GEN-LAST:event_jCandidatoKeyPressed
-
-    private void jCandidatoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCandidatoKeyReleased
-        setarCampos(jCandidato.getSelectedRow());
-    }//GEN-LAST:event_jCandidatoKeyReleased
-
-    private void jCandidatoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCandidatoMouseClicked
-        setarCampos(jCandidato.getSelectedRow());
-    }//GEN-LAST:event_jCandidatoMouseClicked
-
-    private void jCandidatoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCandidatoMouseReleased
-        setarCampos(jCandidato.getSelectedRow());
-    }//GEN-LAST:event_jCandidatoMouseReleased
-    private void limparCampos(){
-        txtNomeCandidato.setText("");
-        jComboBoxPartido.setSelectedIndex(-1);
-        txtNumero.setText("");
-    }
-    
-    private void setarCampos(int e){
-        //'e' é a linha que do qual vai sair os dados setados 
-        
-        txtNomeCandidato.setText(jCandidato.getValueAt(e, 0).toString());
-        txtNumero.setText(jCandidato.getValueAt(e, 2).toString());
-        for(int i = 0;i<jComboBoxPartido.getMaximumRowCount();i++){
-            if(tableModel.getValueAt(e,1).equals(jComboBoxPartido.getItemAt(i))){
-                jComboBoxPartido.setSelectedIndex(i);
-                break;
-            }
-            else{
-                jComboBoxPartido.setSelectedIndex(-1);
-            }
-            //System.out.printf(tableModel.getValueAt(e,1) + " compara com: ");
-            //System.out.println(jComboBoxPartido.getItemAt(i));
-            //prints para debug
-        }
-        
-    }
-    
-    private boolean existeCopia(int e){
-        //'e' é a linha que esta o dado sendo editado, para ser pulado na verificação
-        for(int i = 0; i < jCandidato.getRowCount() ;i++){
-            if(i == e){
-                continue;
-            }
-            if(jCandidato.getValueAt(i, 2).equals(txtNumero.getText())){
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private boolean existeCopia(){
-        //metodo sobrecarregado para verificar a existencia de copias quando uma linha nova eh criada
-        for(int i = 0; i < jCandidato.getRowCount() ;i++){
-            if(jCandidato.getValueAt(i, 2).equals(txtNumero.getText())){
-                return true;
-            }
-        }
-        return false;
-    }
     /**
      * @param args the command line arguments
      */
@@ -439,8 +391,7 @@ public class ViewCandidato extends javax.swing.JFrame {
     private javax.swing.JButton botaoNovo;
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JButton botaoVoltar;
-    private javax.swing.JTable jCandidato;
-    private javax.swing.JComboBox<String> jComboBoxPartido;
+    private javax.swing.JComboBox<Object> comboPartido;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -451,6 +402,7 @@ public class ViewCandidato extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTCandidatos;
     private javax.swing.JTextField txtNomeCandidato;
     private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables

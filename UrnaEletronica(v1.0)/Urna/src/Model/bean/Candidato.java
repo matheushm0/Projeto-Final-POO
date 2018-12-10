@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package Model.bean;
 
 /**
  *
  * @author Alunos
  */
-public class Candidato{
+public class Candidato {
    private int idCandidato;
    private String nomeCandidato;
-   private String numeroCandidato;
+   private int numeroCandidato;
    private int votos;
-   private String idPartido;
-     
+   private Partido idPartido;
+
     public int getIdCandidato() {
         return idCandidato;
     }
@@ -32,11 +32,11 @@ public class Candidato{
         this.nomeCandidato = nomeCandidato;
     }
 
-    public String getNumeroCandidato() {
+    public int getNumeroCandidato() {
         return numeroCandidato;
     }
 
-    public void setNumeroCandidato(String numeroCandidato) {
+    public void setNumeroCandidato(int numeroCandidato) {
         this.numeroCandidato = numeroCandidato;
     }
 
@@ -46,13 +46,16 @@ public class Candidato{
 
     public void setVotos(int votos) {
         this.votos = votos;
-    } 
+    }
 
-    public String getIdPartido() {
+    public Partido getIdPartido() {
         return idPartido;
     }
 
-    public void setIdPartido(String idPartido) {
+    public void setIdPartido(Partido idPartido) {
         this.idPartido = idPartido;
     }
+
+ 
+   
 }
