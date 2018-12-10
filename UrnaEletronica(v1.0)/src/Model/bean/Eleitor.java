@@ -73,6 +73,7 @@ public class Eleitor {
     public void setNumero(String numero) {
         this.numero = numero;
     }
-    
+
+   
     
 }

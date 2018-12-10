@@ -10,16 +10,16 @@ package Model.bean;
  * @author Bryan's PC
  */
 public class Usuario {
-   private int idPartido;
+   private int id;
    private String username;
    private String password;
 
-    public int getIdPartido() {
-        return idPartido;
+    public int getId() {
+        return id;
     }
 
-    public void setIdPartido(int idPartido) {
-        this.idPartido = idPartido;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {

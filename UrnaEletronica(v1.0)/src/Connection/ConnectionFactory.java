@@ -19,15 +19,11 @@ import java.util.logging.Logger;
  */
 public class ConnectionFactory {
   private static final String DRIVE = "com.mysql.jdbc.Driver";
-  private static final String URL = "jdbc:mysql://localhost:3306/urna";
+  private static final String URL = "jdbc:mysql://localhost:3306/banco";
   private static final String USER = "root";
   private static final String PASS = "";
   
-    /**
-     *
-     * @return
-     */
-    public static Connection getConnection (){
+  public static Connection getConnection (){
       try {
           Class.forName(DRIVE);
           

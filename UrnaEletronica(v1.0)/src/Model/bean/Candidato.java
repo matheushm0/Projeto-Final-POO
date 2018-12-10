@@ -14,7 +14,7 @@ public class Candidato {
    private String nomeCandidato;
    private int numeroCandidato;
    private int votos;
-   private int idPartido;
+   private Partido idPartido;
 
     public int getIdCandidato() {
         return idCandidato;
@@ -48,13 +48,14 @@ public class Candidato {
         this.votos = votos;
     }
 
-    public int getIdPartido() {
+    public Partido getIdPartido() {
         return idPartido;
     }
 
-    public void setIdPartido(int idPartido) {
+    public void setIdPartido(Partido idPartido) {
         this.idPartido = idPartido;
     }
-   
+
+ 
    
 }
