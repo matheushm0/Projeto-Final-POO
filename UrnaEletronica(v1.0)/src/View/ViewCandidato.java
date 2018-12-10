@@ -318,7 +318,7 @@ public class ViewCandidato extends javax.swing.JFrame {
         CandidatoDAO dao = new CandidatoDAO();
         c.setNomeCandidato(txtNomeCandidato.getText());
         c.setNumeroCandidato(Integer.parseInt(txtNumero.getText()));
-        c.setIdPartido((Partido) comboPartido.getSelectedItem());
+        c.setVotos(0);
         dao.create(c);
         
         readJTable();

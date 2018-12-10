@@ -31,9 +31,10 @@ public class CandidatoDAO {
         PreparedStatement stmt = null;
 
         try {
-            stmt = con.prepareStatement("INSERT INTO candidato (nome,numero)VALUES(?,?)");
+            stmt = con.prepareStatement("INSERT INTO candidato (nome,numero,voto)VALUES(?,?,?)");
             stmt.setString(1,c.getNomeCandidato());
             stmt.setInt(2,c.getNumeroCandidato());
+            stmt.setInt(3, c.getVotos());
             
             
            

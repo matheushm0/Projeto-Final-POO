@@ -6,7 +6,6 @@
 package Model.DAO;
 
 import Connection.ConnectionFactory;
-import Model.bean.Candidato;
 import Model.bean.Eleitor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -82,26 +81,34 @@ public class EleitorDAO {
        
        return eleitores;
    }
-   
-     public void delete(Eleitor e) {
+    public Eleitor checarCpf(String cpf) throws SQLException {
 
         Connection con = ConnectionFactory.getConnection();
-        
         PreparedStatement stmt = null;
-
+        ResultSet rs = null;
+        Eleitor e = null;
         try {
-            stmt = con.prepareStatement("DELETE FROM eleitor WHERE nome = ?");
-           
-            
-            stmt.setString(1, e.getNomeEleitor());
-            stmt.executeUpdate();
-            
+            stmt = con.prepareStatement("select * from eleitor where cpf=?");
+            stmt.setString(1,e.getCpf());
 
-            JOptionPane.showMessageDialog(null, "Apagado com sucesso!");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao apagar. " + ex);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                String cpff = rs.getString("cpf");
+
+                e = new Eleitor(cpff);
+            }
+        } catch (SQLException e1) {
+            Logger.getLogger(EleitorDAO.class.getName()).log(Level.SEVERE, null, e1);
         } finally {
-            ConnectionFactory.closeConnection(con, stmt);
+            ConnectionFactory.closeConnection(con, stmt, rs);
         }
+
+        return e;
+    }
+
+    public void delete(Eleitor e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

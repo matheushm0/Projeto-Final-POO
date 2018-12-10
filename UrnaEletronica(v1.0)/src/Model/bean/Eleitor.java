@@ -18,6 +18,13 @@ public class Eleitor {
     private String bairro;
     private String numero; 
 
+    public Eleitor() {
+    }
+
+    public Eleitor(String cpf) {
+        this.cpf = cpf;
+    }
+
     public int getIdEleitor() {
         return idEleitor;
     }

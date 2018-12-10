@@ -6,8 +6,14 @@
 package View;
 
 import Model.DAO.CandidatoDAO;
+import Model.DAO.EleitorDAO;
 import Model.bean.Candidato;
+import Model.bean.Eleitor;
 import Model.bean.Partido;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -56,10 +62,10 @@ public class ViewUrna extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        txtCPF = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtNumero = new javax.swing.JTextField();
+        botaoConfirma = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         botaoVoltar = new javax.swing.JButton();
@@ -109,18 +115,18 @@ public class ViewUrna extends javax.swing.JFrame {
         jLabel3.setText("CPF");
 
         try {
-            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+            txtCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
 
         jLabel4.setText("Número do Candidato");
 
-        jButton1.setBackground(new java.awt.Color(51, 204, 0));
-        jButton1.setText("CONFIRMA");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botaoConfirma.setBackground(new java.awt.Color(51, 204, 0));
+        botaoConfirma.setText("CONFIRMA");
+        botaoConfirma.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botaoConfirmaActionPerformed(evt);
             }
         });
 
@@ -147,13 +153,13 @@ public class ViewUrna extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFormattedTextField1)
+                    .addComponent(txtCPF)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextField1)
+                    .addComponent(txtNumero)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(botaoVoltar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
@@ -161,7 +167,7 @@ public class ViewUrna extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(botaoConfirma)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -170,14 +176,14 @@ public class ViewUrna extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(botaoConfirma)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
                     .addComponent(botaoVoltar))
@@ -264,19 +270,26 @@ public class ViewUrna extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_botaoVoltarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botaoConfirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConfirmaActionPerformed
         // TODO add your handling code here:
-        readJTable(jTextField1.getText());
         
         Candidato c = new Candidato();
         CandidatoDAO dao = new CandidatoDAO();
-      
-        c.setNumeroCandidato(Integer.parseInt(jTextField1.getText()));
+        EleitorDAO dao2 = new EleitorDAO();
+        Eleitor eleitor = new Eleitor();
         
-        
-        dao.update(c);
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+        try {
+            if (dao2.checarCpf(txtCPF.getText()).equals(eleitor.getCpf())) {
+                JOptionPane.showMessageDialog(null, "CPF já foi utilizado para votar.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                c.setNumeroCandidato(Integer.parseInt(txtNumero.getText()));
+                dao.update(c);
+                readJTable(txtNumero.getText());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewUrna.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+    }//GEN-LAST:event_botaoConfirmaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,11 +327,10 @@ public class ViewUrna extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoConfirma;
     private javax.swing.JButton botaoVoltar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -329,6 +341,7 @@ public class ViewUrna extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JFormattedTextField txtCPF;
+    private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables
 }
